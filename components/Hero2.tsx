@@ -23,11 +23,11 @@ export default function Hero2() {
           Innovating the Future of Technology
         </h1>
         <p className="text-xl max-w-2xl mx-auto mb-8">
-          At Torama, we specialize in developing cutting-edge solutions
-          (including Artificial Intelligence) for estate management, Health,
-          finTech, and trading. Our mission is to empower businesses and
-          individuals with innovative tools that simplify complex processes and
-          drive growth.
+          At Torama, we harness the power of cutting-edge AI models and advanced
+          machine learning engines to build intelligent applications for
+          fintech, trading, and estate management. Our AI-driven solutions
+          optimize decision-making, enhance efficiency, and unlock new
+          possibilities for businesses and individuals alike.
         </p>
         <div className="flex gap-4 justify-center">
           {/* Link to Products Page */}
