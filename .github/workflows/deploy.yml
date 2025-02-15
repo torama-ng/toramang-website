@@ -32,7 +32,7 @@ jobs:
       - name: Package the app
         run: |
           mkdir -p deployment
-          cp -r .next public package.json package-lock.json next.config.js deployment/
+          cp -r .next public package.json package-lock.json next.config.ts deployment/
 
       # Deploy to Linode
       - name: Deploy to Linode
