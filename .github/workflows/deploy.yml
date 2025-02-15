@@ -1,0 +1,59 @@
+name: Deploy to Linode
+
+on:
+  push:
+    branches:
+      - main # Trigger on pushes to the main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Build the Next.js app
+      - name: Build the app
+        run: npm run build
+
+      # Package the app
+      - name: Package the app
+        run: |
+          mkdir -p deployment
+          cp -r .next public package.json package-lock.json next.config.js deployment/
+
+      # Deploy to Linode
+      - name: Deploy to Linode
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.LINODE_HOST }}
+          username: ${{ secrets.LINODE_USER }}
+          key: ${{ secrets.LINODE_SSH_KEY }}
+          port: 2525 # Add the custom SSH port
+          source: "deployment/*"
+          target: "/var/www/html/torama-website"
+
+      # Restart Apache on Linode
+      - name: Restart Apache
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.LINODE_HOST }}
+          username: ${{ secrets.LINODE_USER }}
+          key: ${{ secrets.LINODE_SSH_KEY }}
+          port: 2525 # Add the custom SSH port
+          script: |
+            cd /var/www/html/torama-website
+            npm install --production
+            sudo systemctl restart apache2
