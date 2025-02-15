@@ -3,57 +3,70 @@ name: Deploy to Linode
 on:
   push:
     branches:
-      - main # Trigger on pushes to the main branch
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
+          cache: 'npm'
 
-      # Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
-      # Build the Next.js app
       - name: Build the app
         run: npm run build
 
-      # Package the app
       - name: Package the app
         run: |
           mkdir -p deployment
           cp -r .next public package.json package-lock.json next.config.ts ecosystem.config.js deployment/
 
-      # Deploy to Linode
       - name: Deploy to Linode
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.LINODE_HOST }}
           username: ${{ secrets.LINODE_USER }}
           key: ${{ secrets.LINODE_SSH_KEY }}
-          port: 2525 # Add the custom SSH port
+          port: 2525
           source: "deployment/*"
           target: "/var/www/html/torama-website"
 
-      # Restart Apache on Linode
-      - name: Restart Apache
+      - name: Restart App on Linode
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.LINODE_HOST }}
           username: ${{ secrets.LINODE_USER }}
           key: ${{ secrets.LINODE_SSH_KEY }}
-          port: 2525 # Add the custom SSH port
+          port: 2525
           script: |
             cd /var/www/html/torama-website
-            npm install --production
-            pm2 reload ecosystem.config.js --env production
+
+            # Ensure correct file permissions
+            chmod -R 755 .
+
+            # Install dependencies
+            npm install --omit=dev
+
+            # Remove old cache & rebuild
+            rm -rf .next
+            npm run build
+
+            # Restart PM2 with correct process
+            pm2 delete torama-website || true
+            pm2 start ecosystem.config.js --env production
+            pm2 save
+
+            # Restart Apache to clear cache
+            sudo systemctl restart apache2
+
+            # Confirm PM2 status
+            pm2 list
