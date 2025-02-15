@@ -75,7 +75,25 @@ export default function Contact() {
         setError(data.error || "Something went wrong. Please try again.");
       }
     } catch (err) {
-      setError("Failed to send message. Please try again.");
+      console.error("Error sending message:", err);
+
+      let errorMessage = "Failed to send message. Please try again.";
+
+      if (err instanceof Error) {
+        switch (err.message) {
+          case "Network Error":
+            errorMessage =
+              "Please check your internet connection and try again.";
+            break;
+          case "Invalid email":
+            errorMessage = "Please enter a valid email address.";
+            break;
+          default:
+            errorMessage = `Failed to send message: ${err.message}`;
+        }
+      }
+
+      setError(errorMessage);
     }
 
     setLoading(false);
