@@ -32,7 +32,7 @@ jobs:
       - name: Package the app
         run: |
           mkdir -p deployment
-          cp -r .next public package.json package-lock.json next.config.ts deployment/
+          cp -r .next public package.json package-lock.json next.config.ts ecosystem.config.js deployment/
 
       # Deploy to Linode
       - name: Deploy to Linode
@@ -56,4 +56,4 @@ jobs:
           script: |
             cd /var/www/html/torama-website
             npm install --production
-            sudo systemctl restart apache2
+            pm2 reload ecosystem.config.js --env production
