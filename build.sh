@@ -1,1 +1,0 @@
-scp -R -p 2525 .next/ user2:/var/www/html/torama-website/
