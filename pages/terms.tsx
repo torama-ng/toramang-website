@@ -36,7 +36,7 @@ export default function Terms() {
         </h2>
         <p className="text-lg mb-4">
           Torama is not liable for any damages arising from your use of our
-          website or services. We provide our services "as is" without
+          website or services. We provide our services &quot;as is&quot; without
           warranties of any kind.
         </p>
         <h2 className="text-2xl font-bold mt-6 mb-4">Changes to Terms</h2>

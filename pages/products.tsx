@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Hero2 from "@/components/Hero2";
+import Image from "next/image";
 
 export default function Products() {
   return (
@@ -14,10 +15,12 @@ export default function Products() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Product 1: Estate Management App */}
           <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-            <img
+            <Image
               src="/estate.png" // Replace with your image path
               alt="Estate Management App"
               className="w-full h-48 object-cover"
+              width={500}
+              height={500}
             />
             <div className="p-6">
               <h2 className="text-2xl font-bold mb-2">Estate Management App</h2>
@@ -33,10 +36,12 @@ export default function Products() {
 
           {/* Product 2: Fintech App */}
           <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-            <img
+            <Image
               src="/fintech.jpg" // Replace with your image path
               alt="Fintech App"
               className="w-full h-48 object-cover"
+              width={500}
+              height={500}
             />
             <div className="p-6">
               <h2 className="text-2xl font-bold mb-2">Fintech App</h2>
@@ -52,10 +57,12 @@ export default function Products() {
 
           {/* Product 3: Trading App */}
           <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-            <img
+            <Image
               src="/trading.png" // Replace with your image path
               alt="Trading App"
               className="w-full h-48 object-cover"
+              width={500}
+              height={500}
             />
             <div className="p-6">
               <h2 className="text-2xl font-bold mb-2">Trading App</h2>
